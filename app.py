@@ -1,9 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, make_response
 from flask_restful import Api, Resource
-from dotenv import load_dotenv
-from icecream import ic
-import os
-from scrape import fetch_weather
+from scrape import get_weather,os,load_dotenv
 
 # Load environment variables from .env
 load_dotenv()
@@ -78,19 +75,15 @@ class Logout(Resource):
 class GetWeather(Resource):
     def get(self):
         data = request.args.to_dict()  # Extract all query parameters as a dictionary
-
         # Validate required parameters
-        if not all(key in data for key in ('city', 'state', 'pincode')):
+        if not all(key in data for key in ('latitude','')):
             return jsonify({
                 "status": "error",
-                "message": "Please provide 'city', 'state', and 'pincode' as query parameters."
+                "message": "Please provide 'latitude', and 'longitude' as query parameters."
             }), 400
         
-        city = "Kuthera" if data['city'] == "Unknown City" else data['city']
-        state = "Himachal Pradesh" if data['city'] == "Unknown City" else data['state']
-        pincode = "177020" if data['city'] == "Unknown City" else data['pincode']
         # Fetch weather data
-        weather_data = fetch_weather(city, state, pincode, unit_fix=FIX_SCRAPER_UNIT)
+        weather_data = get_weather(data['latitude'],data['longitude'])
         
         return jsonify({
             "status": "success",
@@ -104,14 +97,10 @@ class GetWeather(Resource):
         if not data:
             return jsonify({
                 "status": "error",
-                "message": "Please provide 'city', 'state', and 'pincode' as query parameters."
+                "message": "Please provide 'latitude', and 'longitude' as query parameters."
             }), 400
-        
-        city = "Kuthera" if data['city'] == "Unknown City" else data['city']
-        state = "Himachal Pradesh" if data['city'] == "Unknown City" else data['state']
-        pincode = "177020" if data['city'] == "Unknown City" else data['pincode']
 
-        weather_data = fetch_weather(city, state, pincode, unit_fix=FIX_SCRAPER_UNIT)
+        weather_data = get_weather(data['latitude'],data['longitude'])
         return jsonify({
             "status": "success",
             "weather_data": weather_data,

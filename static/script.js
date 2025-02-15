@@ -172,16 +172,20 @@ function fetchWeather() {
             data: JSON.stringify({
                 city: locationData.city,
                 state: locationData.state,
-                pincode: locationData.pincode
+                pincode: locationData.pincode,
+                latitude: locationData.latitude,
+                longitude: locationData.longitude
             }),
             success: function(response) {
+                // console.log(response.weather_data)
                 const weather = response.weather_data;
-                $('#temp').text("\ud83c\udf21\ufe0f" + (weather.tmp || '-'));
+                $('#location').text("\ud83c\udf0d" + weather.city);
+                $('#temp').text("\ud83c\udf21\ufe0f" + (weather.temperature || '-'));
                 // $('#wind_speed').text(" \ud83c\udf2c\ufe0f" + (weather.ws || '-'));
-                $('#desc').text(" ▫️" + (weather.dc || '-'));
+                $('#desc').text(" ▫️" + (weather.weather || '-'));
                 $('#last_fetch').text(" \u23f1\ufe0f" + formatTime() || '-');
-                if (weather.img_src) {
-                    $('#weather_icon').attr('src', weather.img_src).removeClass('hidden');
+                if (weather.icon_url) {
+                    $('#weather_icon').attr('src', weather.icon_url).removeClass('hidden');
                 }
             },
             error: function(err) {
@@ -213,7 +217,9 @@ function fetchLocationOnce() {
             locationData = {
                 city: data.address.city || data.address.town || data.address.village || "Unknown City",
                 state: data.address.state || "Unknown State",
-                pincode: data.address.postcode || "Unknown Pincode"
+                pincode: data.address.postcode || "Unknown Pincode",
+                latitude:latitude,
+                longitude:longitude
             };
 
             // Update the UI with location details
