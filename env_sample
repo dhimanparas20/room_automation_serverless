@@ -1,3 +1,6 @@
+#Open Weather
+OPEN_WEATHER_API_KEY=
+
 #Websocket
 WEBSOCK_BROKER_ADDRESS=test.mosquitto.org
 WEBSOCKET_BASEPATH=/mqtt
