@@ -76,7 +76,7 @@ class GetWeather(Resource):
     def get(self):
         data = request.args.to_dict()  # Extract all query parameters as a dictionary
         # Validate required parameters
-        if not all(key in data for key in ('latitude','')):
+        if not all(key in data for key in ('latitude','longitude')):
             return jsonify({
                 "status": "error",
                 "message": "Please provide 'latitude', and 'longitude' as query parameters."
